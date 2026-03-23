@@ -5,10 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Bot, TrendingUp, Shield, Zap } from "lucide-react";
 
 export default async function HomePage() {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let user = null;
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
+  } catch {
+    // Supabase not configured yet — show landing page
+  }
 
   if (user) {
     redirect("/dashboard");
